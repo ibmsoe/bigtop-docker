@@ -2,7 +2,7 @@
 #
 # 
 
-FROM bigtop-base
+FROM bigtop-base-x86_64
 MAINTAINER Amir Sanjar
 USER root
 
@@ -25,13 +25,13 @@ RUN echo "export JAVA_HOME=` find /usr/ -name java-8-openjdk-*`" |  tee -a  /etc
     echo "export HADOOP_YARN_HOME=/usr/lib/hadoop-yarn" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
     
 RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
-
-     chown -R $USER:hadoop /usr/lib/hadoop*  && \
+     chown -R hdfs:hadoop /usr/lib/hadoop*  && \
      chown -R hdfs:hadoop /var/log/hadoop-hdfs*  && \
      chown -R yarn:hadoop /var/log/hadoop-yarn*  && \
      chown -R mapred:hadoop /var/log/hadoop-mapred*  && \
-     chown -R $USER:hadoop /etc/hadoop
+     chown -R root:hadoop /etc/hadoop 
 
+RUN su hdfs -c "hdfs namenode -format"
 
 CMD ["bash"]
 EXPOSE 50020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030
