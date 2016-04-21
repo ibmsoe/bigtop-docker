@@ -2,16 +2,13 @@
 #
 # 
 
-FROM bigtop/puppet:ubuntu-15.04
+FROM ubuntu:15.04
 MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
 RUN apt-get update && \
-#    apt-get install -y software-properties-common && \
-#    add-apt-repository -y  ppa:openjdk-r/ppa && \
-#    apt-get update && \
-    apt-get install -qqy sudo wget curl openjdk-7-jre apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
+    apt-get install -qqy sudo wget curl openjdk-8-jre apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
 
 # passwordless ssh
 RUN yes | ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
@@ -29,7 +26,7 @@ ENV HADOOP_HOME /usr/lib/hadoop
 ENV HADOOP_PREFIX $HADOOP_HOME
 ENV PATH $PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 ENV HADOOP_CONF_DIR /etc/hadoop/conf
-ENV JAVA_HOME `find /usr/ -name java-8-openjdk-*`
+
 
 ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
@@ -39,7 +36,7 @@ ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
 RUN chown root:root /etc/start_bigtop_services.sh
 RUN chmod 700 /etc/start_bigtop_services.sh
 
-RUN echo "export JAVA_HOME=`find /usr/ -name java-7-*`" |  tee -a  /etc/environment $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
+RUN echo "export JAVA_HOME=`find /usr/ -name java-8-*`" |  tee -a  /etc/environment $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_CONF_DIR=/etc/hadoop/conf"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_PREFIX=/usr/lib/hadoop"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh  && \
     echo "export HADOOP_LIBEXEC_DIR=/usr/lib/hadoop/libexec" | tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
@@ -50,12 +47,11 @@ RUN echo "export JAVA_HOME=`find /usr/ -name java-7-*`" |  tee -a  /etc/environm
     echo "export HADOOP_YARN_HOME=/usr/lib/hadoop-yarn" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
     
 RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
-    # sed -i s/'Port 22'/'Port 2122'/ /etc/ssh/sshd_config && \
-     chown -R $USER:hadoop /usr/lib/hadoop*  && \
+     chown -R hdfs:hadoop /usr/lib/hadoop*  && \
      chown -R hdfs:hadoop /var/log/hadoop-hdfs*  && \
      chown -R yarn:hadoop /var/log/hadoop-yarn*  && \
      chown -R mapred:hadoop /var/log/hadoop-mapred*  && \
-     chown -R $USER:hadoop /etc/hadoop
+     chown -R root:hadoop /etc/hadoop
 
 
 CMD ["bash"]

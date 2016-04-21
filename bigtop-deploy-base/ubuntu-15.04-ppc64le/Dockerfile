@@ -8,9 +8,6 @@ USER root
 
 # install dev tools
 RUN apt-get update && \
-#    apt-get install -y software-properties-common && \
-#    add-apt-repository -y  ppa:openjdk-r/ppa && \
-#    apt-get update && \
     apt-get install -qqy sudo wget curl openjdk-7-jre apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
 
 # passwordless ssh
@@ -34,7 +31,7 @@ RUN chown root:root /root/.ssh/config
 ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
 RUN chown root:root /etc/start_bigtop_services.sh
 RUN chmod 700 /etc/start_bigtop_services.sh
-
+ENV JAVA_TOOL_OPTIONS -Dos.arch=ppc64le
 
 CMD ["bash"]
 EXPOSE 50020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030

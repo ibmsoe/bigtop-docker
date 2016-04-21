@@ -2,13 +2,13 @@
 #
 # 
 
-FROM bigtop-base-ppc64le
+FROM bigtop-base-x86_64
 MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
 RUN apt-get update && \
-    RUNLEVEL=1 apt-get install -y hadoop-hdfs* hadoop-yarn* hadoop-mapred* hadoop-conf* 
+    RUNLEVEL=1 apt-get install -y hadoop-hdfs* hadoop-yarn* hadoop-mapred* hadoop-conf*
 
 ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
 RUN chown root:root /etc/start_bigtop_services.sh

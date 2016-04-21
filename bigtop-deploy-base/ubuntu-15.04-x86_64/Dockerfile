@@ -8,9 +8,6 @@ USER root
 
 # install dev tools
 RUN apt-get update && \
-#    apt-get install -y software-properties-common && \
-#    add-apt-repository -y  ppa:openjdk-r/ppa && \
-#    apt-get update && \
     apt-get install -qqy sudo wget curl openjdk-7-jre apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
 
 # passwordless ssh

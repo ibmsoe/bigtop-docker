@@ -2,16 +2,13 @@
 #
 # 
 
-FROM ubuntu:14.04
+FROM ppc64le/ubuntu:15.04
 MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
 RUN apt-get update && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository -y  ppa:openjdk-r/ppa && \
-    apt-get update && \
-    apt-get install -qqy sudo wget curl openjdk-8-jdk apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
+    apt-get install -qqy sudo wget curl openjdk-8-jre apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
 
 # passwordless ssh
 RUN yes | ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
@@ -21,7 +18,7 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 # Add bigtop distribution repository
 RUN wget -O- http://archive.apache.org/dist/bigtop/bigtop-1.1.0/repos/GPG-KEY-bigtop |  apt-key add - && \
-    wget -O /etc/apt/sources.list.d/bigtop-1.1.0.list  http://www.apache.org/dist/bigtop/bigtop-1.1.0/repos/trusty/bigtop.list && \
+    wget -O /etc/apt/sources.list.d/bigtop-1.1.0.list  http://bigtop-repos.s3.amazonaws.com/releases/1.1.0/ubuntu/vivid/ppc64el/bigtop.list && \
     apt-get update && \
     RUNLEVEL=1 apt-get install -y hadoop-client libhdfs_* 
 
@@ -29,7 +26,7 @@ ENV HADOOP_HOME /usr/lib/hadoop
 ENV HADOOP_PREFIX $HADOOP_HOME
 ENV PATH $PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 ENV HADOOP_CONF_DIR /etc/hadoop/conf
-ENV JAVA_HOME `find /usr/ -name java-8-openjdk-*`
+ENV JAVA_TOOL_OPTIONS -Dos.arch=ppc64le
 
 ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
@@ -50,12 +47,11 @@ RUN echo "export JAVA_HOME=` find /usr/ -name java-8-openjdk-*`" |  tee -a  /etc
     echo "export HADOOP_YARN_HOME=/usr/lib/hadoop-yarn" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
     
 RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
-    # sed -i s/'Port 22'/'Port 2122'/ /etc/ssh/sshd_config && \
-     chown -R $USER:hadoop /usr/lib/hadoop*  && \
+     chown -R hdfs:hadoop /usr/lib/hadoop*  && \
      chown -R hdfs:hadoop /var/log/hadoop-hdfs*  && \
      chown -R yarn:hadoop /var/log/hadoop-yarn*  && \
      chown -R mapred:hadoop /var/log/hadoop-mapred*  && \
-     chown -R $USER:hadoop /etc/hadoop
+     chown -R root:hadoop /etc/hadoop
 
 
 CMD ["bash"]
