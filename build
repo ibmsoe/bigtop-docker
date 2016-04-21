@@ -2,11 +2,11 @@
 set -e
 platform=$HOSTTYPE
 if [[ $platform == 'x86_64' ]]; then
-    base_dir="bigtop-base"/ubuntu-14.04-$platform
-    master_dir="bigtop-hadoop-master"/ubuntu-14.04-$platform
+    base_dir="bigtop-base"/ubuntu-15.04-$platform
+    master_dir="bigtop-hadoop-master"/ubuntu-15.04-$platform
 elif [[ $platform == 'ppc64le' ]]; then
-     base_dir="bigtop-base"/ubuntu-14.04-$platform
-     master_dir="bigtop-hadoop-master"/ubuntu-14.04-$platform
+     base_dir="bigtop-base"/ubuntu-15.04-$platform
+     master_dir="bigtop-hadoop-master"/ubuntu-15.04-$platform
  elif [[ $platform == 'arm64' ]]; then
     echo "TBD"
 fi
