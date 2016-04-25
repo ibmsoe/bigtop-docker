@@ -26,9 +26,7 @@ ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
 RUN chown root:root /root/.ssh/config
 
-ADD install_bigtop_stack.sh /etc/install_bigtop_stack.sh
-RUN chown root:root /etc/install_bigtop_stack.sh
-RUN chmod 700 /etc/install_bigtop_stack.sh
+
 
 CMD ["bash"]
 

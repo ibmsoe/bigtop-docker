@@ -9,7 +9,7 @@ fi
 
 tag=$os_version-$platform
 base_dir="base"/$tag
-run_dir="run"/$tag
+build_dir="build_img"/$tag
 
 if [[ ! -d $base_dir ]]; then
    echo "ERROR : not supported platform"
@@ -19,7 +19,7 @@ cd $base_dir
 docker build --rm --no-cache -t bigtop-deploy-base:$tag .
 cd ../..
 
-cd $run_dir
+cd $build_dir
 docker build --rm --no-cache -t bigtop-deploy:$tag .
 cd ../..
 

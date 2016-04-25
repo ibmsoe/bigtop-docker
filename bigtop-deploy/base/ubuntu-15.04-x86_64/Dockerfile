@@ -2,7 +2,8 @@
 #
 # 
 
-FROM bigtop/puppet:ubuntu-15.04
+## Waiting for https://issues.apache.org/jira/browse/BIGTOP-2266
+FROM bigtop/deploy:ubuntu-14.04
 MAINTAINER Amir Sanjar
 USER root
 
@@ -20,19 +21,13 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 RUN wget -O- http://archive.apache.org/dist/bigtop/bigtop-1.1.0/repos/GPG-KEY-bigtop |  apt-key add - && \
     wget -O /etc/apt/sources.list.d/bigtop-1.1.0.list  http://www.apache.org/dist/bigtop/bigtop-1.1.0/repos/trusty/bigtop.list && \
     apt-get update && \
-    apt-get install bigtop-*
-    
+    apt-get install -yq bigtop-* hadoop-client hbase spark-*    
 
 ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
 RUN chown root:root /root/.ssh/config
 
-ADD install_bigtop_stack.sh /etc/install_bigtop_stack.sh
-RUN chown root:root /etc/install_bigtop_stack.sh
-RUN chmod 700 /etc/install_bigtop_stack.sh
-#ADD bigtop_list /etc/bigtop_list
 
-#RUN /etc/install_bigtop_stack.sh
 
 CMD ["bash"]
-#EXPOSE 50020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030
+
