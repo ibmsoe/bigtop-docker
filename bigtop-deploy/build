@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+platform=$HOSTTYPE
+os_version="ubuntu-15.04"
+
+if [[ $platform == "powerpc64le"  ]]; then 
+   platform="ppc64le"
+fi
+
+tag=$os_version-$platform
+base_dir="base"/$tag
+run_dir="run"/$tag
+
+if [[ ! -d $base_dir ]]; then
+   echo "ERROR : not supported platform"
+   exit 1
+fi 
+cd $base_dir
+docker build --rm --no-cache -t bigtop-deploy-base:$tag .
+cd ../..
+
+cd $run_dir
+docker build --rm --no-cache -t bigtop-deploy:$tag .
+cd ../..
+
