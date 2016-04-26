@@ -2,7 +2,7 @@
 #
 # 
 
-FROM bigtop-base-x86_64
+FROM bigtop-base:ubuntu-15.04-x86_64
 MAINTAINER Amir Sanjar
 USER root
 
@@ -14,7 +14,11 @@ ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
 RUN chown root:root /etc/start_bigtop_services.sh
 RUN chmod 700 /etc/start_bigtop_services.sh
 
-RUN echo "export JAVA_HOME=` find /usr/ -name java-8-openjdk-*`" |  tee -a  /etc/environment $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
+ADD update-conf.sh /etc/update-conf.sh
+RUN chown root:root /etc/update-conf.sh
+RUN chmod 700 /etc/update-conf.sh
+
+RUN echo "export JAVA_HOME=`find /usr/ -name java-8-*`" |  tee -a  $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_CONF_DIR=/etc/hadoop/conf"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_PREFIX=/usr/lib/hadoop"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh  && \
     echo "export HADOOP_LIBEXEC_DIR=/usr/lib/hadoop/libexec" | tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
@@ -29,9 +33,13 @@ RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
      chown -R hdfs:hadoop /var/log/hadoop-hdfs*  && \
      chown -R yarn:hadoop /var/log/hadoop-yarn*  && \
      chown -R mapred:hadoop /var/log/hadoop-mapred*  && \
-     chown -R root:hadoop /etc/hadoop 
+     chown -R root:hadoop /etc/hadoop
 
 RUN su hdfs -c "hdfs namenode -format"
 
-CMD ["bash"]
+
+######update yarn-site.xml
+RUN /etc/update-conf.sh
+
+CMD ["/etc/start_bigtop_services.sh", "namenode", "resourcemanager"]
 EXPOSE 50020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030

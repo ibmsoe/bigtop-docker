@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 platform=$HOSTTYPE
+os="ubuntu-15.04"
 if [[ $platform == 'x86_64' ]]; then
     base_dir="bigtop-base"/ubuntu-15.04-$platform
     master_dir="bigtop-hadoop-master"/ubuntu-15.04-$platform
@@ -15,11 +16,11 @@ if [[ ! -d $base_dir ]]; then
    exit 1
 fi 
 cd $base_dir
-sudo docker build -t bigtop-base-$platform .
+# sudo docker build --rm --no-cache -t bigtop-base:$os-$platform .
 cd ../..
 
 cd $master_dir
-sudo docker build -t bigtop-hadoop-master-$platform .
+sudo docker build --rm --no-cache -t bigtop-hadoop-master:$os-$platform .
 cd ../..
 #docker build --rm --no-cache -t  bigtop-base-$platform .
 
