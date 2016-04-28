@@ -6,7 +6,7 @@
 # Start an Apache Hadoop 2.7.1 namenode container
 
 ```
-sudo docker run -it --name namenode -h namenode bigtop_node /etc/start_bigtop_services.sh -bash -namenode
+docker run --privileged -it --name namenode -h namenode -v `pwd`:/data bigtop-hadoop-master:ubuntu-15.04-x86_64 bash -l -c "/etc/start_bigtop_services.sh  namenode resourcemanager -bash"
 ```
 http://<namenode_ip>:8088
 
@@ -15,7 +15,8 @@ http://<namenode_ip>:8088
 
 In order to add data nodes to the Apache Hadoop cluster, use:
 ```
-sudo docker run -it --link namenode --dns=namenode bigtop_node /etc/start_bigtop_services.sh -bash -datanode {-spark}
+docker run --privileged -it --name slave1 -h slave1 --link namenode --dns 172.17.0.2 -v `pwd`:/data bigtop-hadoop-node86_64 bash -l -c "/etc/start_bigtop_services.sh datanode nodemanager -bash"
+
 ```
 
 You should now be able to access the HDFS Admin UI at
