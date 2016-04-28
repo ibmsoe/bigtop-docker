@@ -1,0 +1,18 @@
+namenode:
+  image: bigtop-hadoop-master:ubuntu-15.04-x86_64
+  container_name: namenode
+  hostname: namenode
+  ports:
+    - "8088:8088"
+    - "50090:50090"
+  command: "/etc/start_bigtop_services.sh namenode resourcemanager -bash"
+datanode:
+  image: bigtop-hadoop-node:ubuntu-15.04-x86_64
+  container_name: datanode
+  links:
+    - "namenode:namenode"
+  ports:
+    - "50070:50070"
+  hostname: datanode 
+  dns: "docker inspect --format=\"{{ .NetworkSettings.IPAddress }}\" namenode"
+  command: "/etc/start_bigtop_services.sh datanode nodedomanager -bash"

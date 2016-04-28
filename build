@@ -2,25 +2,26 @@
 set -e
 platform=$HOSTTYPE
 os="ubuntu-15.04"
-if [[ $platform == 'x86_64' ]]; then
-    base_dir="bigtop-base"/ubuntu-15.04-$platform
-    master_dir="bigtop-hadoop-master"/ubuntu-15.04-$platform
-elif [[ $platform == 'ppc64le' ]]; then
-     base_dir="bigtop-base"/ubuntu-15.04-$platform
-     master_dir="bigtop-hadoop-master"/ubuntu-15.04-$platform
- elif [[ $platform == 'arm64' ]]; then
-    echo "TBD"
-fi
+base_dir="bigtop-base"/$os-$platform
+master_dir="bigtop-hadoop-master"/$os-$platform
+worker_dir="bigtop-hadoop-node"/$os-$platform
 if [[ ! -d $base_dir ]]; then
    echo "ERROR : not supported platform"
    exit 1
 fi 
 cd $base_dir
-# sudo docker build --rm --no-cache -t bigtop-base:$os-$platform .
+#docker build --rm --no-cache -t bigtop-base:$os-$platform .
+cd ../..
+
+cd $worker_dir
+cp ../../common/*.sh .
+docker build --rm --no-cache -t bigtop-hadoop-node:$os-$platform .
+rm *.sh
 cd ../..
 
 cd $master_dir
-sudo docker build --rm --no-cache -t bigtop-hadoop-master:$os-$platform .
+docker build --rm --no-cache -t bigtop-hadoop-master:$os-$platform .
 cd ../..
-#docker build --rm --no-cache -t  bigtop-base-$platform .
+
+
 
