@@ -4,10 +4,10 @@ rm /tmp/*.pid
 
 service ssh start
 ### Must run docker --privileged mode
+echo -e "`hostname -i`\t`hostname -f`" >> /data/hosts
 umount /etc/hosts
 mv /etc/hosts /etc/hosts.bak
-ln -s /data/hosts2 /etc/hosts
-echo -e "`hostname -i`\t`hostname -f`" >> /data/hosts
+ln -s /data/hosts /etc/hosts
 
 for var in "$@"
 do
