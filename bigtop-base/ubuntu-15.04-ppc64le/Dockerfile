@@ -32,11 +32,7 @@ ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
 RUN chown root:root /root/.ssh/config
 
-ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
-RUN chown root:root /etc/start_bigtop_services.sh
-RUN chmod 700 /etc/start_bigtop_services.sh
-
-RUN echo "export JAVA_HOME=` find /usr/ -name java-8-openjdk-*`" |  tee -a  /etc/environment $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
+RUN echo "export JAVA_HOME=`find /usr/ -name java-8-*`" |  tee -a  /etc/environment $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_CONF_DIR=/etc/hadoop/conf"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_PREFIX=/usr/lib/hadoop"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh  && \
     echo "export HADOOP_LIBEXEC_DIR=/usr/lib/hadoop/libexec" | tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
@@ -44,7 +40,9 @@ RUN echo "export JAVA_HOME=` find /usr/ -name java-8-openjdk-*`" |  tee -a  /etc
     echo "export HADOOP_COMMON_HOME=/usr/lib/hadoop" |  tee -a  $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_HDFS_HOME=/usr/lib/hadoop-hdfs" |  tee -a  $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_MAPRED_HOME=/usr/lib/hadoop-mapreduce" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
+    echo "export HADOOP_NAMENODE_OPTS=\"-XX:+UseParallelGC\"" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_YARN_HOME=/usr/lib/hadoop-yarn" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
+echo "export JAVA_TOOL_OPTIONS=\"-Dos.arch=ppc64le\"" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
     
 RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
      chown -R hdfs:hadoop /usr/lib/hadoop*  && \
@@ -55,4 +53,4 @@ RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
 
 
 CMD ["bash"]
-EXPOSE 50020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030
+EXPOSE 50020 50090 8020 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030

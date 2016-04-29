@@ -36,11 +36,8 @@ RUN  chown -R hdfs:hadoop /usr/lib/hadoop*  && \
      chown -R mapred:hadoop /var/log/hadoop-mapred*  && \
      chown -R root:hadoop /etc/hadoop
 
-
-
 ######update yarn-site.xml
 RUN /etc/update-conf.sh
    
-
 CMD ["/etc/start_bigtop_services.sh", "namenode", "resourcemanager"]
 EXPOSE 50020 8020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030

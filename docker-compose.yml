@@ -16,4 +16,12 @@ datanode:
   volumes:
    - .:/data
   privileged: true
-
+client:
+  image: bigtop-hadoop-node:ubuntu-15.04-x86_64
+  links:
+    - "namenode"
+    - "datanode"
+  command: "/etc/start_bigtop_services.sh -d"
+  volumes:
+   - .:/data
+  privileged: true

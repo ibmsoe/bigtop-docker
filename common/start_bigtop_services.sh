@@ -13,7 +13,7 @@ for var in "$@"
 do
 	case $var in
 	"namenode")
-          echo -e "`hostname -i`\t`hostname -f`" > /data/hosts
+          #echo -e "`hostname -i`\t`hostname -f`" > /data/hosts
           service hadoop-hdfs-namenode restart
           ## wait for namenode service 
           sleep 10

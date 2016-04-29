@@ -6,8 +6,6 @@ FROM bigtop-hadoop-node:ubuntu-15.04-x86_64
 MAINTAINER Amir Sanjar
 USER root
 
-######update yarn-site.xml
-#RUN /etc/update-conf.sh
 
 # service hadoop-hdfs-namenode restart && \
 #    hadoop-daemon.sh --config /etc/hadoop/conf.pseudo start namenode 
