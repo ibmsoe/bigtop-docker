@@ -41,8 +41,8 @@ RUN echo "export JAVA_HOME=`find /usr/ -name java-8-*`" |  tee -a  /etc/environm
     echo "export HADOOP_HDFS_HOME=/usr/lib/hadoop-hdfs" |  tee -a  $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_MAPRED_HOME=/usr/lib/hadoop-mapreduce" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_NAMENODE_OPTS=\"-XX:+UseParallelGC\"" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
-    echo "export HADOOP_YARN_HOME=/usr/lib/hadoop-yarn" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
-echo "export JAVA_TOOL_OPTIONS=\"-Dos.arch=ppc64le\"" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
+    echo "export HADOOP_YARN_HOME=/usr/lib/hadoop-yarn" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
+    echo "export JAVA_TOOL_OPTIONS=\"-Dos.arch=ppc64le\"" |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh
     
 RUN  sed -i s/localhost/namenode/ /etc/hadoop/conf/core-site.xml && \
      chown -R hdfs:hadoop /usr/lib/hadoop*  && \

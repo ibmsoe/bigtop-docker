@@ -1,6 +1,9 @@
 #!/bin/bash
-set -e
+set -xe
 platform=$HOSTTYPE
+if [[ $HOSTTYPE=="powerpc64" ]]; then
+  platform=ppc64le
+fi
 os="ubuntu-15.04"
 base_dir="bigtop-base"/$os-$platform
 master_dir="bigtop-hadoop-master"/$os-$platform
