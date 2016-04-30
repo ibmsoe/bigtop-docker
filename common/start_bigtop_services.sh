@@ -44,6 +44,11 @@ do
 	;;
         "spark-master")
           service spark-master restart
+          su hdfs hadoop fs -mkdir -p /directory
+	  su hdfs hadoop fs -chown -R spark:hadoop /directory
+          su hdfs hdfs dfs -chmod -R 1777 /directory
+          su hdfs hdfs dfs -mkdir -p  /var/log/spark/apps
+          su hdfs hdfs dfs -chown -R root:hadoop /var/log/spark
 	;;
         "spark-worker")
           service spark-worker restart

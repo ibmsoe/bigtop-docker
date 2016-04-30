@@ -19,6 +19,11 @@ ADD update-conf.sh /etc/update-conf.sh
 RUN chown root:root /etc/update-conf.sh
 RUN chmod 700 /etc/update-conf.sh
 
+ENV HADOOP_HOME /usr/lib/hadoop
+ENV HADOOP_PREFIX $HADOOP_HOME
+ENV PATH $PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+ENV HADOOP_CONF_DIR /etc/hadoop/conf
+
 RUN echo "export JAVA_HOME=`find /usr/ -name java-8-*`" |  tee -a  $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_CONF_DIR=/etc/hadoop/conf"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh && \
     echo "export HADOOP_PREFIX=/usr/lib/hadoop"  |  tee -a $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/yarn-env.sh  && \
@@ -39,5 +44,5 @@ RUN  chown -R hdfs:hadoop /usr/lib/hadoop*  && \
 ######update yarn-site.xml
 RUN /etc/update-conf.sh
    
-CMD ["/etc/start_bigtop_services.sh", "namenode", "resourcemanager"]
+CMD ["bash"]
 EXPOSE 50020 8020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030

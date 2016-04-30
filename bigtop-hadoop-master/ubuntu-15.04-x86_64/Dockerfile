@@ -7,9 +7,6 @@ MAINTAINER Amir Sanjar
 USER root
 
 
-# service hadoop-hdfs-namenode restart && \
-#    hadoop-daemon.sh --config /etc/hadoop/conf.pseudo start namenode 
-
 RUN su hdfs -c "hdfs namenode -format"
    
 
