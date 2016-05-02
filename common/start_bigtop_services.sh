@@ -3,7 +3,7 @@
 
 service ssh start
 ### Must run docker --privileged mode
-node_ip_hostname=`hostname -i`\t`hostname -f`
+node_ip_hostname="`hostname -i`\t`hostname -f`"
 echo -e  $node_ip_hostname >> /data/hosts
 umount /etc/hosts
 mv /etc/hosts /etc/hosts.bak

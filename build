@@ -17,7 +17,7 @@ if [[ ! -d $base_dir ]]; then
 fi 
 OPS="--rm --no-cache"
 cd $base_dir
-docker build $OPS -t bigtop-base:$os-$platform .
+docker build -t bigtop-base:$os-$platform .
 cd ../..
 
 cd $node_dir
