@@ -22,8 +22,6 @@ RUN echo "export SPARK_MASTER_IP=`hostname`" | tee -a /etc/spark/conf/spark-env.
     echo "log4j.rootCategory=ERROR, console">>/etc/spark/conf/log4j.properties
 
 
-######update yarn-site.xml
-RUN /etc/update-conf.sh
    
-CMD ["/etc/start_bigtop_services.sh", "spark-master"]
+CMD ["/etc/bigtop/start_bigtop_services.sh", "spark-master"]
 EXPOSE 8080 7077 

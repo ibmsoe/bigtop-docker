@@ -20,7 +20,7 @@ RUN echo "export SPARK_MASTER_IP=`hostname`" | tee -a /etc/spark/conf/spark-env.
 #    echo "spark.yarn.am.memory             1024m" >>/etc/spark/conf/spark-defaults.conf
 
 ######update yarn-site.xml
-RUN /etc/update-conf.sh
+#RUN /etc/bigtop/update-conf.sh
    
-CMD ["/etc/start_bigtop_services.sh", "datanode", "nodemanager"]
+CMD ["/etc/bigtop/start_bigtop_services.sh", "datanode", "nodemanager"]
 EXPOSE 50020 8020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030 8080

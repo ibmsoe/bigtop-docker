@@ -1,10 +1,10 @@
 #!/bin/bash
 
-rm /tmp/*.pid
 
 service ssh start
 ### Must run docker --privileged mode
-echo -e "`hostname -i`\t`hostname -f`" >> /data/hosts
+node_ip_hostname=`hostname -i`\t`hostname -f`
+echo -e  $node_ip_hostname >> /data/hosts
 umount /etc/hosts
 mv /etc/hosts /etc/hosts.bak
 ln -s /data/hosts /etc/hosts
@@ -13,7 +13,7 @@ for var in "$@"
 do
 	case $var in
 	"namenode")
-          #echo -e "`hostname -i`\t`hostname -f`" > /data/hosts
+          echo -e $node_ip_hostname> /data/hosts
           service hadoop-hdfs-namenode restart
           ## wait for namenode service 
           sleep 10
@@ -27,8 +27,6 @@ do
 	;;
 	"datanode")
           service hadoop-hdfs-datanode restart
-          ## adding your workers IP/HOSTNAME to namenodes /etc/hosts
-#          echo `hostname -i` " $HOSTNAME" | ssh namenode "sudo sh -c 'cat >>/etc/hosts'"
 	;;
 	"resourcemanager")
           service hadoop-yarn-resourcemanager restart
@@ -44,11 +42,11 @@ do
 	;;
         "spark-master")
           service spark-master restart
-          su hdfs hadoop fs -mkdir -p /directory
-	  su hdfs hadoop fs -chown -R spark:hadoop /directory
-          su hdfs hdfs dfs -chmod -R 1777 /directory
-          su hdfs hdfs dfs -mkdir -p  /var/log/spark/apps
-          su hdfs hdfs dfs -chown -R root:hadoop /var/log/spark
+          su hdfs -c "hadoop fs -mkdir -p /directory"
+	  su hdfs -c "hadoop fs -chown -R spark:hadoop /directory"
+          su hdfs -c "hdfs dfs -chmod -R 1777 /directory"
+          su hdfs -c "hdfs dfs -mkdir -p  /var/log/spark/apps"
+          su hdfs -c "hdfs dfs -chown -R root:hadoop /var/log/spark"
 	;;
         "spark-worker")
           service spark-worker restart

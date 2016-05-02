@@ -8,16 +8,21 @@ USER root
 
 # install dev tools
 RUN apt-get update && \
-    apt-get install -y vim bind9 dnsutils && \
+    apt-get install -y vim && \
     RUNLEVEL=1 apt-get install -y hadoop-hdfs* hadoop-yarn* hadoop-mapred* hadoop-conf* 
 
-ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
-RUN chown root:root /etc/start_bigtop_services.sh
-RUN chmod 700 /etc/start_bigtop_services.sh
+#ADD start_bigtop_services.sh /etc/start_bigtop_services.sh
+#RUN chown root:root /etc/start_bigtop_services.sh
+#RUN chmod 700 /etc/start_bigtop_services.sh
 
-ADD update-conf.sh /etc/update-conf.sh
-RUN chown root:root /etc/update-conf.sh
-RUN chmod 700 /etc/update-conf.sh
+#ADD update-conf.sh /etc/update-conf.sh
+#RUN chown root:root /etc/update-conf.sh
+#RUN chmod 700 /etc/update-conf.sh
+
+RUN mkdir /etc/bigtop
+COPY *.sh /etc/bigtop/
+RUN chown root:root /etc/bigtop/*.sh
+RUN chmod 700 /etc/bigtop/*.sh
 
 ENV HADOOP_HOME /usr/lib/hadoop
 ENV HADOOP_PREFIX $HADOOP_HOME
@@ -42,7 +47,7 @@ RUN  chown -R hdfs:hadoop /usr/lib/hadoop*  && \
      chown -R root:hadoop /etc/hadoop
 
 ######update yarn-site.xml
-RUN /etc/update-conf.sh
+RUN /etc/bigtop/update-conf.sh
    
 CMD ["bash"]
 EXPOSE 50020 8020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030

@@ -4,7 +4,7 @@ namenode:
   hostname: "namenode"
   ports:
     - "50070"
-  command: "/etc/start_bigtop_services.sh namenode resourcemanager -d"
+  command: "/etc/bigtop/start_bigtop_services.sh namenode resourcemanager -d"
   volumes:
     - .:/data
   privileged: true
@@ -12,7 +12,7 @@ datanode:
   image: bigtop-hadoop-node:ubuntu-15.04-ppc64le
   links:
     - "namenode:namenode"
-  command: "/etc/start_bigtop_services.sh datanode nodemanager -d"
+  command: "/etc/bigtop/start_bigtop_services.sh datanode nodemanager -d"
   volumes:
    - .:/data
   privileged: true
@@ -21,7 +21,7 @@ client:
   links:
     - "namenode"
     - "datanode"
-  command: "/etc/start_bigtop_services.sh -d"
+  command: "/etc/bigtop/start_bigtop_services.sh -d"
   volumes:
    - .:/data
   privileged: true
