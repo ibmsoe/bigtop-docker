@@ -47,6 +47,10 @@ do
           su hdfs -c "hdfs dfs -chmod -R 1777 /directory"
           su hdfs -c "hdfs dfs -mkdir -p  /var/log/spark/apps"
           su hdfs -c "hdfs dfs -chown -R root:hadoop /var/log/spark"
+          # pypsark requires localhost set
+          node_ip_hostname="`hostname -i`\tlocalhost"
+          echo -e  $node_ip_hostname >> /data/hosts
+          
 	;;
         "spark-worker")
           service spark-worker restart

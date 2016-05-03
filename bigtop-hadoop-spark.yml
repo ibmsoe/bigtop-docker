@@ -9,7 +9,7 @@ namenode:
     - .:/data
   privileged: true
 datanode:
-  image: bigtop-hadoop-node:ubuntu-15.04-x86_64
+  image: bigtop-hadoop-worker:ubuntu-15.04-x86_64
   links:
     - "namenode:namenode"
   command: "/etc/bigtop/start_bigtop_services.sh datanode nodemanager 'spark-worker' -d"
@@ -21,7 +21,7 @@ spark:
   links:
     - "namenode"
     - "datanode"
-  hostname: "spark_master"
+  hostname: "spark-master"
   command: "/etc/bigtop/start_bigtop_services.sh 'spark-master' -d"
   volumes:
    - .:/data
