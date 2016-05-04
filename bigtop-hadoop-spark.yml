@@ -18,6 +18,7 @@ datanode:
   privileged: true
 spark:
   image: bigtop-spark-master:ubuntu-15.04-x86_64
+  container_name: "spark-master"
   links:
     - "namenode"
     - "datanode"

@@ -3,11 +3,16 @@
 
 service ssh start
 ### Must run docker --privileged mode
-node_ip_hostname="`hostname -i`\t`hostname -f`"
+node_ip_hostname="`hostname -i`\t`hostname -f` localhost"
 echo -e  $node_ip_hostname >> /data/hosts
 umount /etc/hosts
 mv /etc/hosts /etc/hosts.bak
 ln -s /data/hosts /etc/hosts
+
+## Do any optimization here
+if [ -f /data/pre_start.sh ]; then
+  ./data/pre_start.sh
+fi
 
 for var in "$@"
 do
@@ -48,8 +53,8 @@ do
           su hdfs -c "hdfs dfs -mkdir -p  /var/log/spark/apps"
           su hdfs -c "hdfs dfs -chown -R root:hadoop /var/log/spark"
           # pypsark requires localhost set
-          node_ip_hostname="`hostname -i`\tlocalhost"
-          echo -e  $node_ip_hostname >> /data/hosts
+          #node_ip_hostname="`hostname -i`\tlocalhost"
+          #echo -e  $node_ip_hostname >> /data/hosts
           
 	;;
         "spark-worker")
