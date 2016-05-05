@@ -1,7 +1,7 @@
 #!/bin/bash
 set -xe
 platform=$HOSTTYPE
-if [ "$HOSTTYPE" == "powerpc64" ]; then
+if [ "$HOSTTYPE" == "powerpc64le" ]; then
   platform=ppc64le
 fi
 os="ubuntu-15.04"
