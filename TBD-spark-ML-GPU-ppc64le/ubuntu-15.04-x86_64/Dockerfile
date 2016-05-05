@@ -2,7 +2,7 @@
 #
 # 
 
-FROM bigtop-hadoop-node:ubuntu-15.04-ppc64le
+FROM bigtop-hadoop-node:ubuntu-15.04-x86_64
 MAINTAINER Amir Sanjar
 USER root
 
@@ -19,7 +19,6 @@ RUN echo "export SPARK_MASTER_IP='spark-master'" | tee -a /etc/spark/conf/spark-
     echo "log4j.rootCategory=ERROR, console">>/etc/spark/conf/log4j.properties && \
     echo "spark.yarn.am.memory             1024m" >>/etc/spark/conf/spark-defaults.conf && \
     cp /etc/spark/conf/log4j.properties.template /etc/spark/conf/log4j.properties && \
-    echo "export JAVA_TOOL_OPTIONS=\"-Dos.arch=ppc64le\"" | tee -a /etc/spark/conf/spark-env.sh && \
     echo "log4j.rootCategory=ERROR, console">>/etc/spark/conf/log4j.properties
 
 

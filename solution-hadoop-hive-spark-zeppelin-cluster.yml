@@ -1,0 +1,50 @@
+namenode:
+  image: bigtop-hadoop-master:ubuntu-15.04-x86_64
+  container_name: "namenode"
+  hostname: "namenode"
+  ports:
+    - "50070"
+  command: "/etc/bigtop/start_bigtop_services.sh namenode resourcemanager -d"
+  volumes:
+    - .:/data
+  privileged: true
+datanode:
+  image: bigtop-hadoop-worker:ubuntu-15.04-x86_64
+  links:
+    - "namenode:namenode"
+  command: "/etc/bigtop/start_bigtop_services.sh datanode nodemanager 'spark-worker' -d"
+  volumes:
+   - .:/data
+  privileged: true
+hive:
+  image: bigtop-hive:ubuntu-15.04-x86_64
+  container_name: "hive"
+  links:
+    - "namenode"
+    - "datanode"
+  hostname: "hive-master"
+  command: "/etc/bigtop/start_bigtop_services.sh 'hive' -d"
+  volumes:
+   - .:/data
+  privileged: true
+spark:
+  image: bigtop-spark-master:ubuntu-15.04-x86_64
+  container_name: "spark-master"
+  links:
+    - "namenode"
+    - "datanode"
+  hostname: "spark-master"
+  command: "/etc/bigtop/start_bigtop_services.sh 'spark-master' -d"
+  volumes:
+   - .:/data
+  privileged: true
+zeppelin:
+  image: bigtop-zeppelin:ubuntu-15.04-x86_64
+  container_name: "zeppelin"
+  links:
+    - "spark"
+  hostname: "zeppelin"
+  command: "/etc/bigtop/start_bigtop_services.sh 'zeppelin' -d"
+  volumes:
+   - .:/data
+  privileged: true

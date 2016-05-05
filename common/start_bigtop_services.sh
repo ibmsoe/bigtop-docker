@@ -3,7 +3,7 @@
 
 service ssh start
 ### Must run docker --privileged mode
-node_ip_hostname="`hostname -i`\t`hostname -f` localhost"
+node_ip_hostname="`hostname -i`\t`hostname -f`"
 echo -e  $node_ip_hostname >> /data/hosts
 umount /etc/hosts
 mv /etc/hosts /etc/hosts.bak
@@ -18,7 +18,8 @@ for var in "$@"
 do
 	case $var in
 	"namenode")
-          echo -e $node_ip_hostname> /data/hosts
+          echo -e "127.0.0.1	localhost"> /data/hosts
+          echo -e $node_ip_hostname>> /data/hosts
           service hadoop-hdfs-namenode restart
           ## wait for namenode service 
           sleep 10
@@ -54,9 +55,6 @@ do
           su hdfs -c "hdfs dfs -chmod -R 1777 /directory"
           su hdfs -c "hdfs dfs -mkdir -p  /var/log/spark/apps"
           su hdfs -c "hdfs dfs -chown -R root:hadoop /var/log/spark"
-          # pypsark requires localhost set
-          #node_ip_hostname="`hostname -i`\tlocalhost"
-          #echo -e  $node_ip_hostname >> /data/hosts
           
 	;;
         "spark-worker")
@@ -66,6 +64,13 @@ do
           su hdfs -c "hdfs dfs -mkdir /user/zeppelin"
           su hdfs -c "hdfs dfs -chown -R zeppelin /user/zeppelin"
           service zeppelin restart
+	;;
+        "hive")
+          su hdfs -c "hdfs dfs -mkdir -p /user/hive/warehouse"
+          su hdfs -c "hdfs dfs -chown -R root /user/hive"
+          /usr/lib/hive/bin/hiveserver2  &
+          #cat /etc/passwd | grep -i hive | sed -i 's/false/bash/' /etc/passwd
+          #su hive
 	;;
         "-d")
           while true; do sleep 1000; done
