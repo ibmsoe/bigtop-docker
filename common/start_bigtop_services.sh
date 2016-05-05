@@ -35,6 +35,8 @@ do
 	;;
 	"resourcemanager")
           service hadoop-yarn-resourcemanager restart
+          service hadoop-mapreduce-historyserver start
+          service hadoop-yarn-timelineserver restart
 	;;
 	"nodemanager")
           service hadoop-yarn-nodemanager restart
@@ -59,6 +61,11 @@ do
 	;;
         "spark-worker")
           service spark-worker restart
+	;;
+        "zeppelin")
+          su hdfs -c "hdfs dfs -mkdir /user/zeppelin"
+          su hdfs -c "hdfs dfs -chown -R zeppelin /user/zeppelin"
+          service zeppelin restart
 	;;
         "-d")
           while true; do sleep 1000; done

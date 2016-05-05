@@ -10,12 +10,13 @@ master_dir="bigtop-hadoop-master"/$os-$platform
 node_dir="bigtop-hadoop-node"/$os-$platform
 worker_dir="bigtop-hadoop-worker"/$os-$platform
 spark_dir="bigtop-spark-master"/$os-$platform
+zeppelin_dir="bigtop-zeppelin"/$os-$platform
 
 if [[ ! -d $base_dir ]]; then
    echo "ERROR : not supported platform"
    exit 1
 fi 
-OPS="--rm --no-cache"
+#OPS="--rm --no-cache"
 cd $base_dir
 docker build -t bigtop-base:$os-$platform .
 cd ../..
@@ -38,6 +39,8 @@ cd $spark_dir
 docker build $OPS -t bigtop-spark-master:$os-$platform .
 cd ../..
 
-
+cd $zeppelin_dir
+docker build $OPS -t bigtop-zeppelin:$os-$platform .
+cd ../..
 
 
