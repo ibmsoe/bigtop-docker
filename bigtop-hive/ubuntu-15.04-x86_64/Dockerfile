@@ -7,8 +7,7 @@ MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
-RUN apt-get update && \
-    RUNLEVEL=1 apt-get install -y hive
+RUN RUNLEVEL=1 apt-get install -y hive
 
 ENV HIVE_HOME /usr/lib/hive
 ENV HIVE_CONF_DIR /etc/hive/conf

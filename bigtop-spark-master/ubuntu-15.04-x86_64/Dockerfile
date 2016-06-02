@@ -7,8 +7,7 @@ MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
-RUN apt-get update && \
-    RUNLEVEL=1 apt-get install -y spark-core spark-datanucleus spark-extras spark-history-server spark-master spark-python spark-thriftserver spark-yarn-shuffle
+RUN RUNLEVEL=1 apt-get install -y spark-core spark-datanucleus spark-extras spark-history-server spark-master spark-python spark-thriftserver spark-yarn-shuffle
 
 RUN echo "export SPARK_MASTER_IP='spark-master'" | tee -a /etc/spark/conf/spark-env.sh && \
     cp /etc/spark/conf/spark-defaults.conf.template /etc/spark/conf/spark-defaults.conf && \

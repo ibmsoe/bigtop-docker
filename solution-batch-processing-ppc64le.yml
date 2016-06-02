@@ -1,4 +1,6 @@
-namenode:
+version: '2'
+services:
+ namenode:
   image: bigtop-hadoop-master:ubuntu-15.04-ppc64le
   container_name: "namenode"
   hostname: "namenode"
@@ -8,15 +10,17 @@ namenode:
   volumes:
     - .:/data
   privileged: true
-datanode:
+ datanode:
   image: bigtop-hadoop-worker:ubuntu-15.04-ppc64le
   links:
-    - "namenode:namenode"
-  command: "/etc/bigtop/start_bigtop_services.sh datanode nodemanager 'spark-worker' -d"
+    - "namenode"
+  depends_on:
+    - namenode 
+  command: "/etc/bigtop/start_bigtop_services.sh datanode nodemanager 'spark-worker'-d"
   volumes:
    - .:/data
   privileged: true
-spark:
+ spark:
   image: bigtop-spark-master:ubuntu-15.04-ppc64le
   container_name: "spark-master"
   links:

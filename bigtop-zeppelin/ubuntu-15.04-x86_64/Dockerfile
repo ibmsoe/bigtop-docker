@@ -7,8 +7,7 @@ MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
-RUN apt-get update && \
-    RUNLEVEL=1 apt-get install -y zeppelin
+RUN RUNLEVEL=1 apt-get install -y zeppelin
 
 RUN  sed -i -e 's|yarn-client|spark://spark-master:7077|g' /etc/zeppelin/conf/zeppelin-env.sh &&\
      echo "export ZEPPELIN_JAVA_OPTS=\"-Dspark.executor.memory=1G -Dspark.cores.max=4\"" | tee -a /etc/zeppelin/conf/zeppelin-env.sh && \

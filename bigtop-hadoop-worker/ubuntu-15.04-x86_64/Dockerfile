@@ -7,8 +7,7 @@ MAINTAINER Amir Sanjar
 USER root
 
 # install dev tools
-RUN apt-get update && \
-    RUNLEVEL=1 apt-get install -y spark-worker 
+RUN RUNLEVEL=1 apt-get install -y spark-worker 
 
 RUN echo "export SPARK_MASTER_IP=spark-master" | tee -a /etc/spark/conf/spark-env.sh && \
     cp /etc/spark/conf/spark-defaults.conf.template /etc/spark/conf/spark-defaults.conf && \

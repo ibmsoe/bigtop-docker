@@ -8,7 +8,7 @@ USER root
 
 # install dev tools
 RUN apt-get update && \
-    apt-get install -qqy apt-utils sudo wget curl openjdk-8-jre libsnappy1 unzip  libsnappy-java openssl openssh-server openssh-client liblzo2-2 
+    apt-get install -qqy sudo wget curl openjdk-8-jre apt-utils libsnappy1 libsnappy-dev unzip libsnappy-java openssl openssh-server openssh-client liblzo2-2 
 
 # passwordless ssh
 RUN yes | ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key

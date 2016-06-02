@@ -1,4 +1,6 @@
-namenode:
+version: '2'
+services:
+ namenode:
   image: bigtop-hadoop-master:ubuntu-15.04-x86_64
   container_name: "namenode"
   hostname: "namenode"
@@ -8,15 +10,17 @@ namenode:
   volumes:
     - .:/data
   privileged: true
-datanode:
+ datanode:
   image: bigtop-hadoop-node:ubuntu-15.04-x86_64
   links:
-    - "namenode:namenode"
+    - "namenode"
+  depends_on:
+    - namenode 
   command: "/etc/bigtop/start_bigtop_services.sh datanode nodemanager -d"
   volumes:
    - .:/data
   privileged: true
-client:
+ client:
   image: bigtop-hadoop-node:ubuntu-15.04-x86_64
   links:
     - "namenode"
